@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排球积分系统 - 管理后台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 16px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 16px 0;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: #4a90e2;
+        }
+        
+        .btn-success {
+            background: #34c759;
+        }
+        
+        .btn-danger {
+            background: #ff3b30;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .activity-list {
+            list-style: none;
+        }
+        
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-info {
+            flex: 1;
+        }
+        
+        .activity-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .activity-meta {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+        
+        .activity-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: #e6f4ea;
+            color: #34c759;
+        }
+        
+        .status-completed {
+            background: #f2f2f7;
+            color: #8e8e93;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .team-section {
+            margin-bottom: 20px;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .team-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .member-list {
+            list-style: none;
+        }
+        
+        .member-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .member-item:last-child {
+            border-bottom: none;
+        }
+        
+        .member-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .member-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #4a90e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+        
+        .member-name {
+            font-weight: 500;
+        }
+        
+        .member-phone {
+            font-size: 12px;
+            color: #8e8e93;
+        }
+        
+        .game-list {
+            list-style: none;
+        }
+        
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .game-item:last-child {
+            border-bottom: none;
+        }
+        
+        .game-info {
+            flex: 1;
+        }
+        
+        .game-teams {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .game-time {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+        
+        .game-result {
+            font-weight: 600;
+            margin-left: 12px;
+        }
+        
+        .win {
+            color: #34c759;
+        }
+        
+        .lose {
+            color: #ff3b30;
+        }
+        
+        .pending {
+            color: #ff9500;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #8e8e93;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .tab-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .tab-item.active {
+            border-bottom: 2px solid #4a90e2;
+            color: #4a90e2;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 16px 0;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .user-selector {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+        
+        .user-option {
+            padding: 12px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-option:last-child {
+            border-bottom: none;
+        }
+        
+        .user-option:hover {
+            background: #f5f5f5;
+        }
+        
+        .user-option.selected {
+            background: #e6f4ea;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #4a90e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .user-phone {
+            font-size: 12px;
+            color: #8e8e93;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-edit {
+            background: #f2f8ff;
+            color: #4a90e2;
+        }
+        
+        .btn-delete {
+            background: #fff2f2;
+            color: #ff3b30;
+        }
+        
+        .btn-complete {
+            background: #e6f4ea;
+            color: #34c759;
+        }
+    </style>
+</head>
+<body>
+    <!-- 活动列表页面 -->
+    <div id="activity-list-page" class="container">
+        <div class="header">
+            <h1>排球积分系统 - 管理后台</h1>
+        </div>
+        
+        <div class="card">
+            <a href="#" class="btn btn-primary btn-block" id="create-activity-btn">创建新活动</a>
+        </div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 16px;">活动记录</h2>
+            <ul class="activity-list" id="activity-list">
+                <!-- 活动列表将通过JavaScript动态生成 -->
+            </ul>
+        </div>
+    </div>
+    
+    <!-- 创建活动页面 -->
+    <div id="create-activity-page" class="container" style="display: none;">
+        <div class="header">
+            <h1>创建新活动</h1>
+        </div>
+        
+        <div class="card">
+            <form id="create-activity-form">
+                <div class="form-group">
+                    <label class="form-label" for="activity-name">活动名称</label>
+                    <input type="text" id="activity-name" class="form-control" placeholder="例如：周二排球夜" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="activity-date">活动日期</label>
+                    <input type="date" id="activity-date" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="team-count">队伍数量</label>
+                    <select id="team-count" class="form-control">
+                        <option value="2">2个队伍</option>
+                        <option value="3" selected>3个队伍</option>
+                        <option value="4">4个队伍</option>
+                    </select>
+                </div>
+                
+                <div id="teams-container">
+                    <!-- 队伍设置区域将通过JavaScript动态生成 -->
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">创建活动</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 活动详情页面 -->
+    <div id="activity-detail-page" class="container" style="display: none;">
+        <div class="header">
+            <h1 id="activity-detail-title">活动详情</h1>
+        </div>
+        
+        <div class="card">
+            <div class="activity-info">
+                <div class="activity-name" id="detail-activity-name">周二排球夜</div>
+                <div class="activity-meta" id="detail-activity-meta">2024-10-29 | 状态: 进行中</div>
+            </div>
+            
+            <div style="margin-top: 16px;">
+                <button class="btn btn-primary" id="create-game-btn">新增对局</button>
+                <button class="btn btn-success" id="complete-activity-btn" style="margin-left: 8px;">完成活动</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 16px;">对局记录</h2>
+            <ul class="game-list" id="game-list">
+                <!-- 对局列表将通过JavaScript动态生成 -->
+            </ul>
+        </div>
+    </div>
+    
+    <!-- 创建对局页面 -->
+    <div id="create-game-page" class="container" style="display: none;">
+        <div class="header">
+            <h1>创建新对局</h1>
+        </div>
+        
+        <div class="card">
+            <form id="create-game-form">
+                <div class="form-group">
+                    <label class="form-label" for="home-team-select">主队</label>
+                    <select id="home-team-select" class="form-control" required>
+                        <!-- 队伍选项将通过JavaScript动态生成 -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="away-team-select">客队</label>
+                    <select id="away-team-select" class="form-control" required>
+                        <!-- 队伍选项将通过JavaScript动态生成 -->
+                    </select>
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-nav">
+                        <div class="tab-item active" data-tab="home-team">主队队员</div>
+                        <div class="tab-item" data-tab="away-team">客队队员</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="home-team-tab">
+                        <div id="home-team-members">
+                            <!-- 主队队员选择将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="away-team-tab">
+                        <div id="away-team-members">
+                            <!-- 客队队员选择将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">比赛结果</label>
+                    <div>
+                        <label style="margin-right: 16px;">
+                            <input type="radio" name="game-result" value="home-win" required> 主队获胜
+                        </label>
+                        <label>
+                            <input type="radio" name="game-result" value="away-win"> 客队获胜
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">记录对局</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 对局详情页面 -->
+    <div id="game-detail-page" class="container" style="display: none;">
+        <div class="header">
+            <h1>对局详情</h1>
+        </div>
+        
+        <div class="card">
+            <div class="game-info">
+                <div class="game-teams" id="detail-game-teams">队伍1 vs 队伍2</div>
+                <div class="game-time" id="detail-game-time">2024-10-29 20:30:00</div>
+                <div class="game-result" id="detail-game-result">主队获胜</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 16px;">主队成员</h2>
+            <ul class="member-list" id="home-team-detail">
+                <!-- 主队成员将通过JavaScript动态生成 -->
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2 style="margin-bottom: 16px;">客队成员</h2>
+            <ul class="member-list" id="away-team-detail">
+                <!-- 客队成员将通过JavaScript动态生成 -->
+            </ul>
+        </div>
+    </div>
+    
+    <!-- 选择队员模态框 -->
+    <div id="select-members-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">选择队员</div>
+                <button class="modal-close" id="close-member-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="user-selector" id="user-selector">
+                    <!-- 用户列表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="cancel-member-select">取消</button>
+                <button class="btn btn-primary" id="confirm-member-select">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 示例数据
+        const sampleUsers = [
+            { id: 1, name: "岳云杰", phone: "13800138001", ball_number: "VB001" },
+            { id: 2, name: "汉堡", phone: "13800138002", ball_number: "VB002" },
+            { id: 3, name: "yh", phone: "13800138003", ball_number: "VB003" },
+            { id: 4, name: "大肚腩", phone: "13800138004", ball_number: "VB004" },
+            { id: 5, name: "封总", phone: "13800138005", ball_number: "VB005" },
+            { id: 6, name: "张劲博", phone: "13800138006", ball_number: "VB006" },
+            { id: 7, name: "策策", phone: "13800138007", ball_number: "VB007" },
+            { id: 8, name: "王雷", phone: "13800138008", ball_number: "VB008" },
+            { id: 9, name: "小崔", phone: "13800138009", ball_number: "VB009" },
+            { id: 10, name: "小贝", phone: "13800138010", ball_number: "VB010" }
+        ];
+        
+        let activities = JSON.parse(localStorage.getItem('volleyball_activities')) || [];
+        let currentActivityId = null;
+        let currentTeamEditing = null;
+        let selectedUsers = [];
+        
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderActivityList();
+            setupEventListeners();
+        });
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 页面导航
+            document.getElementById('create-activity-btn').addEventListener('click', showCreateActivityPage);
+            
+            // 创建活动表单
+            document.getElementById('create-activity-form').addEventListener('submit', handleCreateActivity);
+            document.getElementById('team-count').addEventListener('change', renderTeamSections);
+            
+            // 创建对局表单
+            document.getElementById('create-game-form').addEventListener('submit', handleCreateGame);
+            
+            // 模态框
+            document.getElementById('close-member-modal').addEventListener('click', closeMemberModal);
+            document.getElementById('cancel-member-select').addEventListener('click', closeMemberModal);
+            document.getElementById('confirm-member-select').addEventListener('click', confirmMemberSelection);
+            
+            // 标签页切换
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+            
+            // 初始渲染队伍部分
+            renderTeamSections();
+        }
+        
+        // 渲染活动列表
+        function renderActivityList() {
+            const activityList = document.getElementById('activity-list');
+            activityList.innerHTML = '';
+            
+            if (activities.length === 0) {
+                activityList.innerHTML = '<li style="text-align: center; padding: 20px; color: #8e8e93;">暂无活动记录</li>';
+                return;
+            }
+            
+            activities.forEach(activity => {
+                const activityItem = document.createElement('li');
+                activityItem.className = 'activity-item';
+                
+                const statusClass = activity.status === 'completed' ? 'status-completed' : 'status-active';
+                const statusText = activity.status === 'completed' ? '已结束' : '进行中';
+                
+                activityItem.innerHTML = `
+                    <div class="activity-info">
+                        <div class="activity-name">${activity.name}</div>
+                        <div class="activity-meta">${activity.date} | 队伍: ${activity.teams.length}支</div>
+                    </div>
+                    <div class="activity-status ${statusClass}">${statusText}</div>
+                `;
+                
+                activityItem.addEventListener('click', () => showActivityDetail(activity.id));
+                activityList.appendChild(activityItem);
+            });
+        }
+        
+        // 渲染队伍设置部分
+        function renderTeamSections() {
+            const teamCount = parseInt(document.getElementById('team-count').value);
+            const teamsContainer = document.getElementById('teams-container');
+            teamsContainer.innerHTML = '';
+            
+            for (let i = 1; i <= teamCount; i++) {
+                const teamSection = document.createElement('div');
+                teamSection.className = 'team-section';
+                teamSection.innerHTML = `
+                    <div class="team-header">
+                        <div class="team-name">队伍${i}</div>
+                        <button type="button" class="btn btn-primary" data-team-index="${i-1}">选择队员</button>
+                    </div>
+                    <ul class="member-list" id="team-${i}-members">
+                        <li style="text-align: center; padding: 12px; color: #8e8e93;">暂无队员</li>
+                    </ul>
+                `;
+                
+                teamsContainer.appendChild(teamSection);
+                
+                // 为选择队员按钮添加事件
+                teamSection.querySelector('button').addEventListener('click', function() {
+                    const teamIndex = parseInt(this.getAttribute('data-team-index'));
+                    openMemberSelector(teamIndex);
+                });
+            }
+        }
+        
+        // 打开选择队员模态框
+        function openMemberSelector(teamIndex) {
+            currentTeamEditing = teamIndex;
+            selectedUsers = [];
+            
+            const userSelector = document.getElementById('user-selector');
+            userSelector.innerHTML = '';
+            
+            sampleUsers.forEach(user => {
+                const userOption = document.createElement('div');
+                userOption.className = 'user-option';
+                userOption.innerHTML = `
+                    <div class="user-avatar">${user.name.charAt(0)}</div>
+                    <div class="user-info">
+                        <div class="user-name">${user.name}</div>
+                        <div class="user-phone">${user.phone} | ${user.ball_number}</div>
+                    </div>
+                `;
+                
+                userOption.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                    const userId = user.id;
+                    
+                    if (this.classList.contains('selected')) {
+                        if (!selectedUsers.includes(userId)) {
+                            selectedUsers.push(userId);
+                        }
+                    } else {
+                        const index = selectedUsers.indexOf(userId);
+                        if (index > -1) {
+                            selectedUsers.splice(index, 1);
+                        }
+                    }
+                });
+                
+                userSelector.appendChild(userOption);
+            });
+            
+            document.getElementById('select-members-modal').style.display = 'flex';
+        }
+        
+        // 关闭选择队员模态框
+        function closeMemberModal() {
+            document.getElementById('select-members-modal').style.display = 'none';
+        }
+        
+        // 确认队员选择
+        function confirmMemberSelection() {
+            if (currentTeamEditing === null) return;
+            
+            const teamMembersList = document.getElementById(`team-${currentTeamEditing + 1}-members`);
+            teamMembersList.innerHTML = '';
+            
+            if (selectedUsers.length === 0) {
+                teamMembersList.innerHTML = '<li style="text-align: center; padding: 12px; color: #8e8e93;">暂无队员</li>';
+            } else {
+                selectedUsers.forEach(userId => {
+                    const user = sampleUsers.find(u => u.id === userId);
+                    if (user) {
+                        const memberItem = document.createElement('li');
+                        memberItem.className = 'member-item';
+                        memberItem.innerHTML = `
+                            <div class="member-info">
+                                <div class="member-avatar">${user.name.charAt(0)}</div>
+                                <div>
+                                    <div class="member-name">${user.name}</div>
+                                    <div class="member-phone">${user.phone}</div>
+                                </div>
+                            </div>
+                        `;
+                        teamMembersList.appendChild(memberItem);
+                    }
+                });
+            }
+            
+            closeMemberModal();
+        }
+        
+        // 切换标签页
+        function switchTab(tabId) {
+            // 更新标签导航
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.tab-item[data-tab="${tabId}"]`).classList.add('active');
+            
+            // 更新标签内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        }
+        
+        // 显示创建活动页面
+        function showCreateActivityPage() {
+            document.getElementById('activity-list-page').style.display = 'none';
+            document.getElementById('create-activity-page').style.display = 'block';
+        }
+        
+        // 显示活动详情页面
+        function showActivityDetail(activityId) {
+            currentActivityId = activityId;
+            const activity = activities.find(a => a.id === activityId);
+            
+            if (!activity) return;
+            
+            document.getElementById('activity-list-page').style.display = 'none';
+            document.getElementById('activity-detail-page').style.display = 'block';
+            
+            document.getElementById('activity-detail-title').textContent = activity.name;
+            document.getElementById('detail-activity-name').textContent = activity.name;
+            
+            const statusText = activity.status === 'completed' ? '已结束' : '进行中';
+            document.getElementById('detail-activity-meta').textContent = `${activity.date} | 状态: ${statusText}`;
+            
+            // 渲染对局列表
+            renderGameList(activity);
+            
+            // 设置按钮事件
+            document.getElementById('create-game-btn').addEventListener('click', showCreateGamePage);
+            document.getElementById('complete-activity-btn').addEventListener('click', completeActivity);
+        }
+        
+        // 渲染对局列表
+        function renderGameList(activity) {
+            const gameList = document.getElementById('game-list');
+            gameList.innerHTML = '';
+            
+            if (!activity.games || activity.games.length === 0) {
+                gameList.innerHTML = '<li style="text-align: center; padding: 20px; color: #8e8e93;">暂无对局记录</li>';
+                return;
+            }
+            
+            activity.games.forEach(game => {
+                const gameItem = document.createElement('li');
+                gameItem.className = 'game-item';
+                
+                const resultClass = game.result === 'pending' ? 'pending' : (game.result === 'home-win' ? 'win' : 'lose');
+                const resultText = game.result === 'pending' ? '未完成' : (game.result === 'home-win' ? '主队胜' : '客队胜');
+                
+                gameItem.innerHTML = `
+                    <div class="game-info">
+                        <div class="game-teams">${game.homeTeam.name} vs ${game.awayTeam.name}</div>
+                        <div class="game-time">${game.time}</div>
+                    </div>
+                    <div class="game-result ${resultClass}">${resultText}</div>
+                `;
+                
+                gameItem.addEventListener('click', () => showGameDetail(activity.id, game.id));
+                gameList.appendChild(gameItem);
+            });
+        }
+        
+        // 显示创建对局页面
+        function showCreateGamePage() {
+            const activity = activities.find(a => a.id === currentActivityId);
+            if (!activity) return;
+            
+            document.getElementById('activity-detail-page').style.display = 'none';
+            document.getElementById('create-game-page').style.display = 'block';
+            
+            // 填充队伍选择
+            const homeTeamSelect = document.getElementById('home-team-select');
+            const awayTeamSelect = document.getElementById('away-team-select');
+            
+            homeTeamSelect.innerHTML = '';
+            awayTeamSelect.innerHTML = '';
+            
+            activity.teams.forEach(team => {
+                const option1 = document.createElement('option');
+                option1.value = team.name;
+                option1.textContent = team.name;
+                
+                const option2 = document.createElement('option');
+                option2.value = team.name;
+                option2.textContent = team.name;
+                
+                homeTeamSelect.appendChild(option1);
+                awayTeamSelect.appendChild(option2);
+            });
+            
+            // 设置默认队员
+            renderTeamMembersForGame('home-team-members', activity.teams[0]);
+            renderTeamMembersForGame('away-team-members', activity.teams[1]);
+        }
+        
+        // 渲染对局中的队员
+        function renderTeamMembersForGame(containerId, team) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!team.members || team.members.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 12px; color: #8e8e93;">暂无队员</div>';
+                return;
+            }
+            
+            team.members.forEach(memberId => {
+                const user = sampleUsers.find(u => u.id === memberId);
+                if (user) {
+                    const memberItem = document.createElement('div');
+                    memberItem.className = 'member-item';
+                    memberItem.innerHTML = `
+                        <div class="member-info">
+                            <div class="member-avatar">${user.name.charAt(0)}</div>
+                            <div>
+                                <div class="member-name">${user.name}</div>
+                                <div class="member-phone">${user.phone}</div>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn btn-edit" data-user-id="${user.id}">替换</button>
+                        </div>
+                    `;
+                    container.appendChild(memberItem);
+                    
+                    // 为替换按钮添加事件
+                    memberItem.querySelector('.btn-edit').addEventListener('click', function() {
+                        const userId = parseInt(this.getAttribute('data-user-id'));
+                        // 这里可以实现替换队员的逻辑
+                        alert(`替换队员: ${user.name}`);
+                    });
+                }
+            });
+        }
+        
+        // 显示对局详情页面
+        function showGameDetail(activityId, gameId) {
+            const activity = activities.find(a => a.id === activityId);
+            if (!activity) return;
+            
+            const game = activity.games.find(g => g.id === gameId);
+            if (!game) return;
+            
+            document.getElementById('activity-detail-page').style.display = 'none';
+            document.getElementById('game-detail-page').style.display = 'block';
+            
+            document.getElementById('detail-game-teams').textContent = `${game.homeTeam.name} vs ${game.awayTeam.name}`;
+            document.getElementById('detail-game-time').textContent = game.time;
+            
+            const resultText = game.result === 'pending' ? '未完成' : (game.result === 'home-win' ? '主队获胜' : '客队获胜');
+            document.getElementById('detail-game-result').textContent = resultText;
+            document.getElementById('detail-game-result').className = `game-result ${game.result === 'pending' ? 'pending' : (game.result === 'home-win' ? 'win' : 'lose')}`;
+            
+            // 渲染队员详情
+            renderTeamDetail('home-team-detail', game.homeTeam);
+            renderTeamDetail('away-team-detail', game.awayTeam);
+        }
+        
+        // 渲染队伍详情
+        function renderTeamDetail(containerId, team) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!team.members || team.members.length === 0) {
+                container.innerHTML = '<li style="text-align: center; padding: 12px; color: #8e8e93;">暂无队员</li>';
+                return;
+            }
+            
+            team.members.forEach(memberId => {
+                const user = sampleUsers.find(u => u.id === memberId);
+                if (user) {
+                    const memberItem = document.createElement('li');
+                    memberItem.className = 'member-item';
+                    memberItem.innerHTML = `
+                        <div class="member-info">
+                            <div class="member-avatar">${user.name.charAt(0)}</div>
+                            <div>
+                                <div class="member-name">${user.name}</div>
+                                <div class="member-phone">${user.phone} | ${user.ball_number}</div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(memberItem);
+                }
+            });
+        }
+        
+        // 处理创建活动
+        function handleCreateActivity(e) {
+            e.preventDefault();
+            
+            const activityName = document.getElementById('activity-name').value;
+            const activityDate = document.getElementById('activity-date').value;
+            const teamCount = parseInt(document.getElementById('team-count').value);
+            
+            // 收集队伍信息
+            const teams = [];
+            for (let i = 1; i <= teamCount; i++) {
+                const teamMembersList = document.getElementById(`team-${i}-members`);
+                const members = [];
+                
+                // 从列表项中提取用户ID
+                const memberItems = teamMembersList.querySelectorAll('.member-item');
+                memberItems.forEach(item => {
+                    // 这里简化处理，实际应该存储用户ID
+                    // 在这个示例中，我们只是存储示例用户ID
+                    members.push(i); // 简化处理，实际应该存储真实用户ID
+                });
+                
+                teams.push({
+                    name: `队伍${i}`,
+                    members: members
+                });
+            }
+            
+            const newActivity = {
+                id: Date.now(),
+                name: activityName,
+                date: activityDate,
+                status: 'active',
+                teams: teams,
+                games: []
+            };
+            
+            activities.push(newActivity);
+            localStorage.setItem('volleyball_activities', JSON.stringify(activities));
+            
+            alert('活动创建成功！');
+            showActivityListPage();
+            renderActivityList();
+        }
+        
+        // 处理创建对局
+        function handleCreateGame(e) {
+            e.preventDefault();
+            
+            const homeTeamName = document.getElementById('home-team-select').value;
+            const awayTeamName = document.getElementById('away-team-select').value;
+            const gameResult = document.querySelector('input[name="game-result"]:checked').value;
+            
+            if (homeTeamName === awayTeamName) {
+                alert('主队和客队不能相同！');
+                return;
+            }
+            
+            const activity = activities.find(a => a.id === currentActivityId);
+            if (!activity) return;
+            
+            // 查找队伍信息
+            const homeTeam = activity.teams.find(t => t.name === homeTeamName);
+            const awayTeam = activity.teams.find(t => t.name === awayTeamName);
+            
+            if (!homeTeam || !awayTeam) {
+                alert('队伍信息错误！');
+                return;
+            }
+            
+            const newGame = {
+                id: Date.now(),
+                homeTeam: {
+                    name: homeTeamName,
+                    members: homeTeam.members
+                },
+                awayTeam: {
+                    name: awayTeamName,
+                    members: awayTeam.members
+                },
+                result: gameResult,
+                time: new Date().toLocaleString()
+            };
+            
+            activity.games.push(newGame);
+            localStorage.setItem('volleyball_activities', JSON.stringify(activities));
+            
+            alert('对局记录成功！');
+            showActivityDetail(currentActivityId);
+        }
+        
+        // 完成活动
+        function completeActivity() {
+            const activity = activities.find(a => a.id === currentActivityId);
+            if (!activity) return;
+            
+            if (confirm('确定要完成这个活动吗？完成后将不能再编辑活动和对局。')) {
+                activity.status = 'completed';
+                localStorage.setItem('volleyball_activities', JSON.stringify(activities));
+                
+                alert('活动已完成！');
+                showActivityDetail(currentActivityId);
+            }
+        }
+        
+        // 显示活动列表页面
+        function showActivityListPage() {
+            document.getElementById('create-activity-page').style.display = 'none';
+            document.getElementById('activity-detail-page').style.display = 'none';
+            document.getElementById('create-game-page').style.display = 'none';
+            document.getElementById('game-detail-page').style.display = 'none';
+            document.getElementById('activity-list-page').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
